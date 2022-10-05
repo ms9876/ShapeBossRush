@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlatformerWorldManager : WorldForm
 {
-    float _gravity = 0.98f;
+    float _gravity = 10f;
     [SerializeField] float _jumpPower = 20f;
     [SerializeField] LayerMask _layermask;
 
