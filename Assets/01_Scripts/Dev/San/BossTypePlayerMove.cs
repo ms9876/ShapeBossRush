@@ -28,7 +28,6 @@ public class BossTypePlayerMove : MonoBehaviour
     [SerializeField] KeyCode _downKey = KeyCode.None;
 
     // 월드별 이동방식, 패턴들을 구현해둔 스크립트들
-    DefaultWorldManager _defaultWorld = null;
     AvoidWorldManager _avoidWorld = null;
     TetrisWorldManager _tetrisWorld = null;
     ShootingWorldManager _platformerWorld = null;
@@ -37,7 +36,6 @@ public class BossTypePlayerMove : MonoBehaviour
     {
         _playerRb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
 
-        _defaultWorld = GetComponentInChildren<DefaultWorldManager>();
         _avoidWorld = GetComponentInChildren<AvoidWorldManager>();
         _tetrisWorld = GetComponentInChildren<TetrisWorldManager>();
         _platformerWorld = GetComponentInChildren<ShootingWorldManager>();
@@ -53,7 +51,7 @@ public class BossTypePlayerMove : MonoBehaviour
         _playerRb.velocity = Vector2.zero;
         if(_playerState == State.None)
         {
-            _defaultWorld.Move(_playerRb, _leftKey, _rightKey, _upKey, _downKey);
+            
         }
         else if(_playerState == State.Avoid)
         {
