@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum State
+public enum WorldState
 {
     None = 0,
     Avoid = 1,
@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     // 플레이어 현재 보스 화면 유형
     [SerializeField]
-    State _playerState = State.None;
+    WorldState _playerState = WorldState.None;
 
     // 플레이어 이동키
     [SerializeField] KeyCode _leftKey = KeyCode.None;
@@ -50,19 +50,19 @@ public class Player : MonoBehaviour
     private void Move()
     {
         _playerRb.velocity = Vector2.zero;
-        if(_playerState == State.None)
+        if(_playerState == WorldState.None)
         {
             _defaultWorld.Move(_playerRb, _leftKey, _rightKey, _upKey, _downKey);
         }
-        else if(_playerState == State.Avoid)
+        else if(_playerState == WorldState.Avoid)
         {
             _avoidWorld.Move(_playerRb, _leftKey, _rightKey, _upKey, _downKey);
         }
-        else if(_playerState == State.Tetris)
+        else if(_playerState == WorldState.Tetris)
         {
             _tetrisWorld.Move(_playerRb, _leftKey, _rightKey, _upKey, _downKey);
         }
-        else if(_playerState == State.Platformer)
+        else if(_playerState == WorldState.Platformer)
         {
             _platformerWorld.Move(_playerRb, _leftKey, _rightKey, _upKey, _downKey);
         }

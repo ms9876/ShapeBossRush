@@ -11,7 +11,6 @@ public class PlatformerWorldManager : WorldForm
     public override void Move(Rigidbody2D rb, KeyCode left, KeyCode right, KeyCode up, KeyCode down)
     {
         //
-        Platformer(_gravity, _jumpPower, rb, up, _layermask);
         DirectionCheck(rb);
     }
 
