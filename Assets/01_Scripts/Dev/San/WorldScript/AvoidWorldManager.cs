@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AvoidWorldManager : WorldForm
 {
+    [Header("플레이어가 움직일 라인들의 위치값")]
     [SerializeField] Vector2[] _pos = null;
     int _posIndex;
     private void Start()
