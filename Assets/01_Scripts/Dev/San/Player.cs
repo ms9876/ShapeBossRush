@@ -13,22 +13,39 @@ public class Player : MonoBehaviour
     private float _damageDelay = 0.5f;
     bool _canDamage = false;
 
-    private SpriteRenderer _playerSprite;
+    [SerializeField]
+    private SpriteRenderer _normalSprite;
+    [SerializeField]
+    private GameObject _ballPlayer;
+    [SerializeField]
+    private GameObject _boxMovingPlayer;
+
+    [SerializeField]
     private CircleCollider2D _colider;
     public CircleCollider2D Colider => _colider;
 
     private void Awake()
     {
-        _playerSprite = GetComponent<SpriteRenderer>();
-        _colider = GetComponent<CircleCollider2D>();
+        _ballPlayer.SetActive(false);
+        _boxMovingPlayer.SetActive(false);
+    }
+    public void SetBallPlayer()
+    {
+        _ballPlayer.SetActive(true);
+        _boxMovingPlayer.SetActive(false);
+    }
+    public void SetBoxPlayer()
+    {
+        _ballPlayer.SetActive(false);
+        _boxMovingPlayer.SetActive(true);
     }
     public void ViewLeft()
     {
-        _playerSprite.flipX = true;
+        _normalSprite.flipX = true;
     }
     public void ViewRight()
     {
-        _playerSprite.flipX = false;
+        _normalSprite.flipX = false;
     }
     
     public void TakeDamage(int damage)

@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using DG.Tweening;
 using TreeEditor;
+using System;
 
 public class CameraManager : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class CameraManager : MonoBehaviour
         instance = this;
 
         Init();
+        ChangeVCam();
     }
     public void Init()
     {
@@ -84,6 +86,12 @@ public class CameraManager : MonoBehaviour
     }
 
     // 구현 목록
+    public void ResetCam(float zoomValue, float rotationValue)
+    {
+        _activeVCam.m_Lens.OrthographicSize = zoomValue;
+        _activeVCam.transform.rotation = Quaternion.Euler(0, 0, rotationValue);
+    }
+
     public void DOMoveCam(float time, Vector3 moveTransform) //카메라 위치 이동
     {
         if (_activeVCam == null) return;
@@ -93,17 +101,62 @@ public class CameraManager : MonoBehaviour
         _activeVCam.transform.DOMove(moveTransform, time);
         //time 내에 _cam의 위치를 moveTransform위치로 변경
     }
-    public void RotationCam(float time, Vector3 rotationValue)
+    public void RotationCam(float time, float rotationValue) // 특정 값"만큼" 돌리기
     {
         if (_activeVCam == null) return;
-        Vector3 currentTransform = _activeVCam.transform.position;
-        _activeVCam.transform.DORotate(rotationValue, time, RotateMode.FastBeyond360);
+        StartCoroutine(RotationCamcoroutine(time, rotationValue));
     }
+    IEnumerator RotationCamcoroutine(float time, float rotationValue)
+    {
+        float currentTime = 0f;
+        float originRotate = _activeVCam.transform.eulerAngles.z;
+        originRotate = originRotate >= 180 ? originRotate - 360f : originRotate;
+        while (currentTime < time)
+        {
+            yield return new WaitForEndOfFrame();
+            _activeVCam.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(originRotate, originRotate + rotationValue, currentTime / time));
+            currentTime += Time.deltaTime;
+        }
+        _activeVCam.transform.rotation = Quaternion.Euler(0, 0, originRotate + rotationValue);
+    }
+
+    public void ValueRotationCam(float time, float rotationValue)
+    {
+        if (_activeVCam == null) return;
+        StartCoroutine(ValueRotationCamcoroutine(time, rotationValue));
+        //현재 -에서 +로 가면 한 바퀴 회전하는 버그 발생
+    } // 특정 값"으로" 돌리기
+    IEnumerator ValueRotationCamcoroutine(float time, float rotationValue) //나중에 돌아가는 방향 관련 코드 만들기
+    {
+        float currentTime = 0f;
+        float originRotate = _activeVCam.transform.eulerAngles.z;
+        originRotate = originRotate >= 180 ? originRotate - 360f : originRotate;
+        while (currentTime < time)
+        {
+            yield return new WaitForEndOfFrame();
+            _activeVCam.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(originRotate, rotationValue, currentTime / time));
+            currentTime += Time.deltaTime;
+        }
+        _activeVCam.transform.rotation = Quaternion.Euler(0, 0, rotationValue);
+    }
+    public void WaitValueRotationCam(float time, float rotationValue, float delay) // 특정 값으로 돌렸다가 정위치로
+    {
+        if (_activeVCam == null) return;
+        StartCoroutine(WaitValueRotationCamcoroutine(time, rotationValue, delay));
+    }
+    IEnumerator WaitValueRotationCamcoroutine(float time, float rotationValue, float delay)
+    {
+        float halfTime = time / 2;
+        float originRotate = _activeVCam.transform.eulerAngles.z;
+        ValueRotationCam(halfTime, rotationValue);
+        yield return new WaitForSeconds(delay+halfTime);
+        ValueRotationCam(halfTime, originRotate);
+    }
+
     public void ShakeCam(float time, float shakeValue)
     {
         //_activePerlin사용
         if (_activeVCam == null || _activePerlin == null) return;
-        StopAllCoroutines();
         StartCoroutine(ShakeCamcoroutine(time, shakeValue));
     }
     IEnumerator ShakeCamcoroutine(float time, float shakeValue)
@@ -117,14 +170,12 @@ public class CameraManager : MonoBehaviour
             _activePerlin.m_AmplitudeGain = Mathf.Lerp(shakeValue, 0, currentTime/time);
             currentTime += Time.deltaTime;
         }
-        if (_activePerlin != null)
-            _activePerlin.m_AmplitudeGain = 0;
+        _activePerlin.m_AmplitudeGain = 0;
     }
     public void ZoomCam(float time, float value)
     {
         if (_activeVCam == null) return;
         //value값으로 줌 바꾸는 코드
-        StopAllCoroutines();
         StartCoroutine(ZoomCamcoroutine(time, value));
     }
     IEnumerator ZoomCamcoroutine(float time, float value)
@@ -143,7 +194,6 @@ public class CameraManager : MonoBehaviour
     {
         if (_activeVCam == null) return;
         //value로 줌을 바꿨다가 원래 값으로 바꾸는 메서드
-        StopAllCoroutines();
         StartCoroutine(ZoomSwitchingCamcoroutine(time, value, delay));
     }
     IEnumerator ZoomSwitchingCamcoroutine(float time, float value, float delay)

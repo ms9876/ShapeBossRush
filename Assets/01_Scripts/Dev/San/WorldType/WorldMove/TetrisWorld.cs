@@ -13,7 +13,6 @@ public class TetrisWorld : WorldType, WorldMove
             DamageAbleLayer);
         if (hit != null)//블럭이 바닥에 닿았는지 확인하는 코드 필요
         {
-            Destroy(hit.gameObject);
             Player.TakeDamage(1);
         }
     }

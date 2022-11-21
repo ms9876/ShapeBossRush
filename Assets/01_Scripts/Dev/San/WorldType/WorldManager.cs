@@ -13,10 +13,22 @@ public enum WorldState
 
 public class WorldManager : MonoBehaviour
 {
+
+    public static WorldManager instance;
     [SerializeField] // 디버깅용 시리얼 라이즈 필드
     private WorldState _worldState; // 현재 월드
+    public WorldState WorldState=> _worldState;
 
     private WorldMove _currentWorld;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError("Multiple CamaraManager instance is running");
+        }
+        instance = this;
+    }
 
     private void Update()
     {
