@@ -13,14 +13,37 @@ public enum WorldState
 
 public class WorldManager : MonoBehaviour
 {
-    //World를 관리하는 뇌 역할의 스크립트
-    private Rigidbody2D _playerRigidBody; // 플레이어 리지드바디
+
+    public static WorldManager instance;
     [SerializeField] // 디버깅용 시리얼 라이즈 필드
     private WorldState _worldState; // 현재 월드
+    public WorldState WorldState=> _worldState;
+
+    private WorldMove _currentWorld;
 
     private void Awake()
     {
-        _playerRigidBody = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        if (instance != null)
+        {
+            Debug.LogError("Multiple CamaraManager instance is running");
+        }
+        instance = this;
+    }
+
+    private void Update()
+    {
+        if(_currentWorld != null)
+        {
+            _currentWorld.WorldPlay();
+            _currentWorld.DamageCheck();
+
+        }
+    }
+
+    public void ChangeWorld(WorldMove game, WorldState state)
+    {
+        _currentWorld = game;
+        _worldState = state;
     }
 
 }
