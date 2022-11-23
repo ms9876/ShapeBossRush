@@ -13,8 +13,8 @@ public class AvoidWorld : WorldType, WorldMove
 
     public void DamageCheck()
     {
-        Collider2D hit = Physics2D.OverlapCircle(PlayerTransform.position, Player.Colider.radius,0,DamageAbleLayer);
-        if (hit != null)
+        RaycastHit2D ray = Physics2D.Raycast(PlayerTransform.position, Vector2.up, Player.Colider.radius, DamageAbleLayer);
+        if (ray.collider)
         {
             Player.TakeDamage(1);
         }

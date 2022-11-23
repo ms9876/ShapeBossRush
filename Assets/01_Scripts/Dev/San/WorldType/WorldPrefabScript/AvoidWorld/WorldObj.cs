@@ -6,6 +6,7 @@ public class WorldObj : PoolableMono
 {
     [SerializeField]
     WorldState _thisObjWorld = WorldState.None;
+    public WorldState thisObjWorld { get { return _thisObjWorld; } set { _thisObjWorld = value; } }
 
     public override void Reset()
     {

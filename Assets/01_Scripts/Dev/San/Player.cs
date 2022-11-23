@@ -5,13 +5,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static bool _noDie = false;
+
+    [SerializeField]
+    private GameObject diePanel;
+
     [SerializeField]
     private int _playerHp = 0;
+    [SerializeField]
     private int _currentHp = 0;
 
     [SerializeField]
     private float _damageDelay = 0.5f;
-    bool _canDamage = false;
+    bool _canDamage = true;
 
     [SerializeField]
     private SpriteRenderer _normalSprite;
@@ -28,6 +34,7 @@ public class Player : MonoBehaviour
     {
         _ballPlayer.SetActive(false);
         _boxMovingPlayer.SetActive(false);
+        _currentHp = _playerHp;
     }
     public void SetBallPlayer()
     {
@@ -53,7 +60,7 @@ public class Player : MonoBehaviour
         if (_canDamage)
         {
             _currentHp -= damage;
-            CameraManager.instance.ShakeCam(0.5f, damage);
+            CameraManager.instance.ShakeCam(0.5f, damage*10);
             StartCoroutine("DamageDelay");
         }
         if(_currentHp <= 0)
@@ -72,6 +79,8 @@ public class Player : MonoBehaviour
     {
         // 죽는 코드
         // 재시작 가능하도록 하기, 나가기
+        diePanel.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void ResetValue()

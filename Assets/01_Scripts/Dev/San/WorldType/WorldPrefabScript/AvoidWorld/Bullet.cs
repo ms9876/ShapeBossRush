@@ -13,17 +13,17 @@ public class Bullet : WorldObj
     {
         transform.position += Vector3.down * downSpeed * Time.deltaTime;
 
-        if(transform.position.y < deleteY)
+        if ((transform.position.y < deleteY && thisObjWorld != WorldState.Tetris) || transform.position.y > 10)
+        {
+            PoolManager.Instance.Push(this);
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D obj)
+    {
+        if (obj.gameObject.CompareTag("BossYellow"))
         {
             PoolManager.Instance.Push(this);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D obj)
-    {
-        if (obj.CompareTag("Player"))
-        {
-            PoolManager.Instance.Push(this);
-        }
-    }
 }
