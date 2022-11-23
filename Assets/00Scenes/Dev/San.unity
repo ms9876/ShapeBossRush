@@ -794,7 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fdd98b1f1b3b0c438901065c2d38848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossHp: 50
+  bossHp: 30
   clearEffect: {fileID: 1103584720}
   clearPanel: {fileID: 983679972}
 --- !u!50 &567395398
@@ -1398,7 +1398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0
+  m_AmplitudeGain: 2.173431
   m_FrequencyGain: 1
   mNoiseOffsets: {x: -963.12646, y: 577.07544, z: -598.5708}
 --- !u!114 &904585373
@@ -7742,6 +7742,7 @@ MonoBehaviour:
   - {fileID: 1852875313}
   - {fileID: 1121824230}
   speed: 15
+  bossTrm: {fileID: 630461109}
 --- !u!114 &1553435805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8155,7 +8156,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -8721,7 +8722,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 10
+    OrthographicSize: 8
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0

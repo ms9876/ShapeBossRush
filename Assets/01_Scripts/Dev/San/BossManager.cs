@@ -72,7 +72,7 @@ public class BossManager : MonoBehaviour
         float shortTerm = 0.3f;
         float term = 0.4f;
         float longTerm = 0.6f;
-        /*
+        
         AudioChange(0);
         yield return new WaitForSeconds(1f);
         //
@@ -208,7 +208,7 @@ public class BossManager : MonoBehaviour
         yield return new WaitForSeconds(shortTerm + shortdelay);
         CameraManager.instance.ShakeCam(3f, 100f);
         
-        */
+        
         yield return new WaitForSeconds(3f);
         //
         WorldManager.instance.ChangeWorld(_tetrisWorld, WorldState.Tetris);

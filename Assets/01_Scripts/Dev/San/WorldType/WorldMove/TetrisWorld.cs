@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class TetrisWorld : WorldType, WorldMove
 {
@@ -10,6 +11,8 @@ public class TetrisWorld : WorldType, WorldMove
     private List<GameObject> mapActiveFalseObj = new List<GameObject>();
     [SerializeField]
     private float speed = 5;
+    [SerializeField]
+    private Transform bossTrm;
     //슈팅 월드라고 칩시다
     public void DamageCheck()
     {
@@ -66,6 +69,7 @@ public class TetrisWorld : WorldType, WorldMove
             obj.SetActive(false);
         }
         StartCoroutine("SummonBullet");
+        StartCoroutine("BossSummonBullet");
     }
     IEnumerator SummonBullet()
     {
@@ -79,24 +83,45 @@ public class TetrisWorld : WorldType, WorldMove
     IEnumerator BossSummonBullet()
     {
         float x = 8;
-        int summonY = 10;
-        while (true)
+        while (!Player._noDie)
         {
-            int rdValue = Random.Range(0, 5); //0~4
+            int rdValue = Random.Range(0, 4); //0~3
             if (rdValue == 0)
             {
-
+                for(int i=0; i<5; i++)
+                {
+                    PoolableMono bossBullet = PoolManager.Instance.Pop("bossBullet");
+                    bossBullet.transform.position = bossTrm.position;
+                    bossBullet.transform.rotation = Quaternion.Euler(0, 0, i * 36);
+                    PoolableMono bossBullet2 = PoolManager.Instance.Pop("bossBullet");
+                    bossBullet2.transform.position = bossTrm.position;
+                    bossBullet2.transform.rotation = Quaternion.Euler(0, 0, i * 36 + 90);
+                    PoolableMono bossBullet3 = PoolManager.Instance.Pop("bossBullet");
+                    bossBullet3.transform.position = bossTrm.position;
+                    bossBullet3.transform.rotation = Quaternion.Euler(0, 0, i * 36 + 180);
+                    PoolableMono bossBullet4 = PoolManager.Instance.Pop("bossBullet");
+                    bossBullet4.transform.position = bossTrm.position;
+                    bossBullet4.transform.rotation = Quaternion.Euler(0, 0, i * 36 + 240);
+                    yield return new WaitForSeconds(0.1f);
+                }  
             }
             else if (rdValue == 1)
             {
-
+                for (int i = 0; i < 9; i++)
+                {
+                    PoolableMono bossBullet = PoolManager.Instance.Pop("bossBullet");
+                    bossBullet.transform.position = bossTrm.position;
+                    bossBullet.transform.rotation = Quaternion.Euler(0, 0, i * 40);
+                }
+                yield return new WaitForSeconds(0.2f);
             }
             else if (rdValue >= 2)
             {
-                float summonX = Random.Range(-x, x);
-                PoolableMono bossBullet = PoolManager.Instance.Pop("bossBullet");
-                bossBullet.transform.position = new Vector2(summonX, summonY);
+                float posX = Random.Range(-x, x);
+                bossTrm.DOMoveX(posX, 1f);
+                yield return new WaitForSeconds(0.05f);
             }
+            
         }
         
     }

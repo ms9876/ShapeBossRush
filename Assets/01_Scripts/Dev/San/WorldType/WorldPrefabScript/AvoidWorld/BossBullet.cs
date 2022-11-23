@@ -11,7 +11,7 @@ public class BossBullet : WorldObj
 
     private void Update()
     {
-        transform.position += Vector3.down * downSpeed * Time.deltaTime;
+        transform.Translate(Vector3.right * downSpeed * Time.deltaTime);
 
         if ((transform.position.y < deleteY && thisObjWorld != WorldState.Tetris) || transform.position.y > 10)
         {
