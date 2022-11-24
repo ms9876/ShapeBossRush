@@ -9,6 +9,9 @@ public class SceneChanger : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(sceneName);
-        
+    }
+    public void Exiting()
+    {
+        Application.Quit();
     }
 }

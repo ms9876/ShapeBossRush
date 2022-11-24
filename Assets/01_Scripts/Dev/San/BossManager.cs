@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using TMPro;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
@@ -8,6 +9,9 @@ public class BossManager : MonoBehaviour
     [SerializeField]
     private Effect[] effects;
     private int stageValue = -1;
+
+    [SerializeField]
+    private TextMeshProUGUI text;
 
     [SerializeField]
     private AudioSource _audio;
@@ -72,9 +76,15 @@ public class BossManager : MonoBehaviour
         float shortTerm = 0.3f;
         float term = 0.4f;
         float longTerm = 0.6f;
-        
+
+        text.text = "3";
+        yield return new WaitForSeconds(0.5f);
+        text.text = "2";
+        yield return new WaitForSeconds(0.5f);
+        text.text = "1";
         AudioChange(0);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
+        text.gameObject.SetActive(false);
         //
         CameraManager.instance.ResetCam(8, 0);
         _avoidWorld.WorldSetting(_lineListOne);

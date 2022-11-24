@@ -10,6 +10,8 @@ public class TetrisWorld : WorldType, WorldMove
     [SerializeField]
     private List<GameObject> mapActiveFalseObj = new List<GameObject>();
     [SerializeField]
+    private List<GameObject> mapActiveTrueObj = new List<GameObject>();
+    [SerializeField]
     private float speed = 5;
     [SerializeField]
     private Transform bossTrm;
@@ -67,6 +69,10 @@ public class TetrisWorld : WorldType, WorldMove
         foreach(GameObject obj in mapActiveFalseObj)
         {
             obj.SetActive(false);
+        }
+        foreach(GameObject obj in mapActiveTrueObj)
+        {
+            obj.SetActive(true);
         }
         StartCoroutine("SummonBullet");
         StartCoroutine("BossSummonBullet");
