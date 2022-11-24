@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using DG.Tweening;
-using TreeEditor;
 using System;
 
 public class CameraManager : MonoBehaviour
@@ -88,6 +87,7 @@ public class CameraManager : MonoBehaviour
     // 구현 목록
     public void ResetCam(float zoomValue, float rotationValue)
     {
+        _activeVCam.transform.position = new Vector3(0, 0, _activeVCam.transform.position.z);
         _activeVCam.m_Lens.OrthographicSize = zoomValue;
         _activeVCam.transform.rotation = Quaternion.Euler(0, 0, rotationValue);
     }
@@ -185,8 +185,8 @@ public class CameraManager : MonoBehaviour
         while (currentTime < time)
         {
             yield return new WaitForEndOfFrame();
-            _activeVCam.m_Lens.OrthographicSize = Mathf.Lerp(originOrthographicSize, value, currentTime/time);
-            currentTime += Time .deltaTime;
+            _activeVCam.m_Lens.OrthographicSize = Mathf.Lerp(originOrthographicSize, value, currentTime / time);
+            currentTime += Time.deltaTime;
         }
         _activeVCam.m_Lens.OrthographicSize = value;
     }

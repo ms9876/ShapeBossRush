@@ -1,26 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using TMPro;
 using UnityEngine;
 
 public class BoxMovingWorld : WorldType, WorldMove
 {
+    [SerializeField]
+    private TextMeshProUGUI timeTxt;
     BoxMovingWorldData _worldData;
     int index = 0;
-    List<int> damageLists = new List<int>();
-    float time = 3f;
-    float returnTime = 1f;
-    float shortReturntime = 0.2f;
-    float delay = 0.3f;
+    int arriveIndex = 0;
+    List<int> NotBlock = new List<int>();
+    bool isDamaged = false;
+    float returnTime = 0.2f;
     float shortDelay = 0.05f;
 
-    
+    int[] basicMapData =
+        { 0, 1, 2, 3, 4, 5, 6,
+        7, 8, 9, 10, 11, 12, 13,
+        14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27
+    };
 
     public void DamageCheck()
     {
-        
+        if (isDamaged)
+        {
+            Player.TakeDamage(1);
+        }
         
     }
-
     public void WorldPlay()
     {
         if (Input.GetKeyDown(LeftKey))
@@ -28,6 +38,7 @@ public class BoxMovingWorld : WorldType, WorldMove
             if((index+1) % 7 != 1)
             {
                 index--;
+                SetPos();
             }
         }
         if (Input.GetKeyDown(RightKey))
@@ -35,6 +46,7 @@ public class BoxMovingWorld : WorldType, WorldMove
             if((index+1) % 7 != 0)
             {
                 index++;
+                SetPos();
             }
         }
         if (Input.GetKeyDown(UpKey))
@@ -42,6 +54,7 @@ public class BoxMovingWorld : WorldType, WorldMove
             if (!(index - 7 < 0))
             {
                 index -= 7;
+                SetPos();
             }
             
         }
@@ -50,70 +63,97 @@ public class BoxMovingWorld : WorldType, WorldMove
             if(!(index + 7 > _worldData.SaveBlockData.Length - 1))
             {
                 index += 7;
+                SetPos();
             }
         }
-        if (damageLists != null)
+        if (NotBlock != null)
         {
-            for (int i = 0; i < damageLists.Count; i++)
+            for (int i = 0; i < NotBlock.Count; i++)
             {
-                if (index == damageLists[i])
+                if (index == NotBlock[i])
                 {
-                    index = 17;
+                    ResetPos();
+                    CameraManager.instance.ShakeCam(0.5f, 8f);
                 }
             }
         }
-        SetPos();
+        
     }
 
     public void WorldSetting()
     {
         PoolableMono world = PoolManager.Instance.Pop("BoxMovingWorld");
         _worldData = world.GetComponent<BoxMovingWorldData>();
-        index = 17;
-        SetPos();
+        timeTxt.gameObject.SetActive(true);
+        ResetPos();
     }
     public void SetPos()
     {
         PlayerTransform.position = _worldData.SaveBlockData[index].transform.position;
     }
-    public float DamagedTiles(int[] index)
+    public void ResetPos()
     {
-        StartCoroutine(DamagedTilescoroutine(index));
-        return returnTime;
+        index = 17;
+        SetPos();
     }
-    IEnumerator DamagedTilescoroutine(int[] index)
+    public float MapSetting(WorldData worldData)
     {
-        float currentTime = 0f;
-        while (currentTime < time)
+        StartCoroutine(MapSettingcoroutine(worldData));
+        return worldData.time+returnTime;
+    }
+    IEnumerator MapSettingcoroutine(WorldData worldData)
+    {
+        int[] mapIndex = worldData.mapData;
+        arriveIndex = worldData.arrivePoint;
+        float rimitTime = worldData.time;
+        ResetPos();
+        yield return new WaitForSeconds(shortDelay);
+        NotBlock.Clear();
+        foreach(int box in basicMapData)
+        {
+            _worldData.SaveBlockData[box].Sprite.color = Color.black;
+            NotBlock.Add(box);
+        }
+        foreach(int block in mapIndex)
+        {
+            _worldData.SaveBlockData[block].Sprite.color = Color.white;
+            NotBlock.Remove(block);
+        }
+        _worldData.SaveBlockData[arriveIndex].Sprite.color = Color.yellow;
+        float currentTime = rimitTime;
+        
+        while (currentTime >= 0)
         {
             yield return new WaitForEndOfFrame();
-            for (int i=0; i<index.Length; i++)
-            {
-                Color color = Color.white;
-                color.r = Mathf.Lerp(Color.white.r, Color.red.r, currentTime / time);
-                color.g = Mathf.Lerp(Color.white.g, Color.red.g, currentTime / time);
-                color.b = Mathf.Lerp(Color.white.b, Color.red.b, currentTime / time);
-                _worldData.SaveBlockData[index[i]].Sprite.color = color;
-                currentTime += Time.deltaTime;
-            }
+            timeTxt.text = string.Format("{0:f2}", currentTime);
+            currentTime -= Time.deltaTime;
         }
-        for (int i = 0; i < index.Length; i++)
+        timeTxt.text = "0.00";
+        CameraManager.instance.ZoomSwitchingCam(returnTime, 9, shortDelay);
+        if(index != arriveIndex)
         {
-            _worldData.SaveBlockData[index[i]].Sprite.color = Color.red;
-        }
-        yield return new WaitForSeconds(delay);
-        for(int i=0; i<index.Length; i++)
-        {
-            _worldData.SaveBlockData[index[i]].Sprite.color = Color.black;
-            damageLists.Add(index[i]);
-        }
-        yield return new WaitForSeconds(delay);
-        for (int i = 0; i < index.Length; i++)
-        {
-            _worldData.SaveBlockData[index[i]].Sprite.color = Color.white;
+            isDamaged = true;
         }
     }
     //제작 필요
     // 월드리셋, 월드맵데이터, 데미지드타일을 맵 생성으로 바꾸고 도착좌표와 시간 변수 추가하기
     
+}
+
+public struct WorldData
+{
+    public int[] mapData;
+    public int arrivePoint;
+    public float time;
+
+    public WorldData(int[] mapData, int arrivePoint, float time)
+    {
+        this.mapData = mapData;
+        this.arrivePoint = arrivePoint;
+        this.time = time;
+    }
+    // 0  1  2  3  4  5  6
+    // 7  8  9 10 11 12 13
+    //14 15 16 17 18 19 20
+    //21 22 23 24 25 26 27
 }
