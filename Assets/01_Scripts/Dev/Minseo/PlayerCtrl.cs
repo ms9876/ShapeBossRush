@@ -11,6 +11,9 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField]
     private GameObject boss;
 
+    [SerializeField]
+    private bool canDie;
+
     public float speed;
     public float radius;
     public Vector2 center;
@@ -40,7 +43,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Bullet")
+        if (collision.tag == "Bullet" && canDie)
         {
             diePanel.SetActive(true);
             Time.timeScale = 0;

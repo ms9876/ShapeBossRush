@@ -29,7 +29,6 @@ public class BigObjectWorld : MonoBehaviour
     {
         if (Mathf.Floor(countDown) <= 0)
         {
-            Debug.Log("tlr");
             bullet_0.SetActive(false);
             timerObject.SetActive(false);
             rotateWorld.SetActive(true);

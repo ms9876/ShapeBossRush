@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00Scenes/Dev/Minseo.unity
     guid: 513c8bf71c656d3499cb29232016a0bf
+  - enabled: 1
+    path: Assets/00Scenes/Dev/Clear.unity
+    guid: 9767a6aa18da30d469f7ded87552452d
   m_configObjects: {}

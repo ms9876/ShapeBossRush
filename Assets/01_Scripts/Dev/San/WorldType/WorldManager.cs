@@ -48,5 +48,9 @@ public class WorldManager : MonoBehaviour
         _currentWorld = game;
         _worldState = state;
     }
+    public void ChangeWorldState(WorldState state)
+    {
+        _worldState = state;
+    }
 
 }
