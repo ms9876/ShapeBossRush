@@ -219,7 +219,9 @@ public class BossManager : MonoBehaviour
         CameraManager.instance.ShakeCam(3f, 100f);
         
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
+        AudioChange(3);
+        yield return new WaitForSeconds(1f);
         //
         WorldManager.instance.ChangeWorld(_tetrisWorld, WorldState.Tetris);
         CameraManager.instance.ResetCam(8, 0);
@@ -253,7 +255,7 @@ public class BossManager : MonoBehaviour
     IEnumerator AudioVolumeSet(int idx)
     {
         float currentTime = 0;
-        while (audioSetTime > currentTime)
+        while (audioSetTime/2 > currentTime)
         {
             yield return new WaitForEndOfFrame();
             _audio.volume = Mathf.Lerp(_audioVolume, 0, currentTime / audioSetTime);
@@ -263,7 +265,7 @@ public class BossManager : MonoBehaviour
         _audio.clip = _audioClip[idx];
         _audio.Play();
         currentTime = 0;
-        while(audioSetTime > currentTime)
+        while(audioSetTime/2 > currentTime)
         {
             yield return new WaitForEndOfFrame();
             _audio.volume = Mathf.Lerp(0, _audioVolume, currentTime / audioSetTime);

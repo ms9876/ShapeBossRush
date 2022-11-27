@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
             CameraManager.instance.ShakeCam(0.5f, damage*10);
             StartCoroutine("DamageDelay");
         }
-        if(_currentHp <= 0)
+        if(_currentHp <= 0 && !_noDie)
         {
             Die();
         }

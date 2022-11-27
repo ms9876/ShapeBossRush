@@ -14,4 +14,8 @@ public class SceneChanger : MonoBehaviour
     {
         Application.Quit();
     }
+    public void ActiveTrueObject(GameObject active)
+    {
+        active.SetActive(true);
+    }
 }
