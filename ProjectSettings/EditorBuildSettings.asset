@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00Scenes/Dev/San.unity
     guid: 80aff08aaa497754db80796a57a9d8d9
+  - enabled: 1
+    path: Assets/00Scenes/Dev/Minseo.unity
+    guid: 513c8bf71c656d3499cb29232016a0bf
   m_configObjects: {}

@@ -8,6 +8,9 @@ public enum WorldState
     Tetris = 1,
     AvoidAndShot = 2,
     BoxMoving = 3,
+    Followbullet1 = 4,
+    BigBullet = 5, 
+    Followbullet2 = 6
 }
 
 

@@ -15,9 +15,9 @@ public class WorldObj : PoolableMono
 
     private void Update()
     {
-        if(WorldManager.instance.WorldState != _thisObjWorld)
-        {
-            PoolManager.Instance.Push(this);
-        }
+        //if(WorldManager.instance.WorldState != _thisObjWorld)
+        //{
+        //    PoolManager.Instance.Push(this);
+        //}
     }
 }

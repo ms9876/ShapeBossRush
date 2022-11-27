@@ -4,23 +4,46 @@ using UnityEngine;
 
 public class PlayerCtrl : MonoBehaviour
 {
-    Rigidbody2D rigidbody = null;
+    public static bool _noDie = false;
 
-    // 플레이어 이동키
-    [SerializeField] KeyCode _leftKey = KeyCode.None;
-    [SerializeField] KeyCode _rightKey = KeyCode.None;
-    [SerializeField] KeyCode _upKey = KeyCode.None;
-    [SerializeField] KeyCode _downKey = KeyCode.None;
+    [SerializeField]
+    private GameObject diePanel;
+    [SerializeField]
+    private GameObject boss;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float speed;
+    public float radius;
+    public Vector2 center;
 
-    // Update is called once per frame
+    private float angle = 0;
+    private float direction = -1;
+
+
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            direction *= -1;
+        }
+
+        angle += Time.deltaTime * speed * direction;
+
+        if (angle >= 360f)
+        {
+            angle = 0;
+        }
+
+        Vector2 pos = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+        transform.position = pos.normalized * radius + center;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Bullet")
+        {
+            diePanel.SetActive(true);
+            Time.timeScale = 0;
+        }
     }
 }
