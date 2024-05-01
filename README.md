@@ -1,1 +1,2 @@
-# MountainTeam
+# ShapeBossRush
+> 2022년도 경기게임마이스터고등학교 1학년 2학기 엔진 팀 프로젝트 우수작 ( 3등 )
